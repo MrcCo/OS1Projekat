@@ -12,18 +12,16 @@
 #include "Def.h"
 #include "IVTEntry.h"
 
+//constructor
+//connects running PCB to the event, and inserts the event in the IVTable
 KernelEvent::KernelEvent(IVTNo ivtNo){
-
-	//lock
 
 	myPCB = PCB::running;
 	IVTable::myInterruptVectorTable->entries[(int) ivtNo]->setEvent(this);
 
-	//unlock
-
-
 }
 
+//destructor
 KernelEvent::~KernelEvent(){
 
 	IVTable::myInterruptVectorTable->entries[(int) ivtNo]->restoreOldRoutine();
@@ -31,48 +29,39 @@ KernelEvent::~KernelEvent(){
 
 }
 
-
+//standard wait method
 void KernelEvent::wait(){
-
-	//lock
 
 	if(myPCB == PCB::running && val-- == 0){
 		block();
 	}
 
-	//unlock
-
 }
 
+//standard signal method
 void KernelEvent::signal(){
-
-	//lock
-
 
 	if(val<1 && val++<0){
 		deblock();
 	}
 
-	//unlock
 }
 
+//blocks the running thread and initiates context switch
 void KernelEvent::block() {
 
-	//lock
+	if(myPCB != NULL){
+		myPCB->state = BLOCKED;
+	}
+	dispatch();
 
-		if(myPCB != NULL){
-			myPCB->state = BLOCKED;
-		}
-		dispatch();
-
-	//unlock
 }
 
+//deblocks the thread and returns it to the scheduler
 void KernelEvent::deblock() {
-
-	//lock
-		myPCB->state = READY;
-		Scheduler::put(myPCB);
-	//unlock
+	
+	myPCB->state = READY;
+	Scheduler::put(myPCB);
+	
 }
 
