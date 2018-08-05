@@ -32,7 +32,7 @@ public:
 	void wait();
 protected:
 	friend class KernelEvent;
-	void signal(); // can call KernelEv
+	void signal(); 
 private:
 	KernelEvent* myImpl;
 };
