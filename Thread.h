@@ -14,12 +14,8 @@ static Time defaultTimeSlice = 2;
 typedef unsigned long StackSize;
 static StackSize defaultStackSize = 4096;
 #include <STDIO.H>
-/*********************************/
-/*		forward declarations	 */
 
 class PCB;
-/*********************************/
-/*		Class Thread             */
 
 class Thread {
 public:
@@ -27,16 +23,15 @@ public:
 	void waitToComplete();
 	virtual ~Thread();
 	static void sleep(Time timeToSleep);
-
 	int getId() const;
 	PCB* getPCB() const{
 		return myPCB;
 	}
 	static int contextSwitchRequested;
 	Thread(StackSize stackSize = defaultStackSize, Time timeSlice = defaultTimeSlice);
+
 protected:
 	friend class PCB;
-
 	virtual void run(){}
 
 private:
