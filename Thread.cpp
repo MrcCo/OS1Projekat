@@ -13,18 +13,17 @@
 #include "Def.h"
 #include "Timer.h"
 #include "STDIO.H"
-/*********************************/
-/*		Constructor				 */
 
+//constructor
+//just creates Thread's PCB
 Thread::Thread(StackSize stackSize, Time timeSlice) {
 
 	myPCB = new PCB(this, stackSize, timeSlice);
-	//printf("Finished Thread const\n");
+
 }
 
-/*********************************/
-/*		Destructor				 */
-
+//destructor
+//calls waitToComplete method and deletes the PCB
 Thread::~Thread() {
 
 	waitToComplete();
@@ -33,9 +32,8 @@ Thread::~Thread() {
 }
 
 
-/*********************************/
-/*		Methods					 */
-
+//thread control methods
+//just wrapper methods calling PCB methods
 void Thread::start() {
 	myPCB->start();
 }
