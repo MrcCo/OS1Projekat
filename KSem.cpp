@@ -13,11 +13,15 @@
 #include "SCHEDULE.h"
 
 //constructor
+//initiates sem's value and creates a list of waiting threads
 KernelSem::KernelSem(int init) {
+	
 	this->val = init;
 	if (waitingList != NULL) {
 		waitingList = new PCBList();
 	}
+	
+	//useless, just like test_and_set and semLock
 	lck = 0;
 }
 
@@ -26,10 +30,9 @@ KernelSem::~KernelSem(){
 	delete waitingList;
 }
 
-
-/********************************/
-/*		Methods					*/
+//wait method that uses additional toBlock integer 
 int KernelSem::wait(int toBlock) {
+	
 	semLock();
 	if (toBlock <= 0) {
 		if (val > 0) {
@@ -56,6 +59,7 @@ int KernelSem::wait(int toBlock) {
 	semUnlock();
 }
 
+//standard signal method
 void KernelSem::signal() {
 	semLock();
 	val++;
@@ -79,11 +83,13 @@ int test_and_set(int x) {
 
 }
 
+//useless
 void KernelSem::semLock() {
 	while (test_and_set(KernelSem::lck))
 		;
 }
 
+//useless
 void KernelSem::semUnlock() {
 	KernelSem::lck = 0;
 }
