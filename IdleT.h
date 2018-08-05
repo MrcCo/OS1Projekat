@@ -10,8 +10,6 @@
 
 #include "Thread.h"
 
-/*********************************/
-/*		Class IdleThread		 */
 class IdleThread: public Thread {
 public:
 	IdleThread() :	Thread(0,1) {};
