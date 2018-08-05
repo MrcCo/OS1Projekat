@@ -11,6 +11,8 @@
 #include "DOS.h"
 #include "Def.h"
 
+//constructor
+//sets up a new interrupt routine, and adds it to the IVTable
 IVTEntry::IVTEntry(int id, pInterrupt newRoutine) {
 	if (id < 256) {
 		this->id = id;
@@ -23,22 +25,26 @@ IVTEntry::IVTEntry(int id, pInterrupt newRoutine) {
 	}
 }
 
+//destrucotr
 IVTEntry::~IVTEntry() {
 	IVTable::myInterruptVectorTable->entries[id] = NULL;
 	restoreOldRoutine();
 }
 
+//calls old routine
 void IVTEntry::callOldRoutine() {
 	if (oldRoutine != NULL)
 		oldRoutine();
 }
 
+//standard signal method
 void IVTEntry::signal() {
 	if (myEvent != NULL) {
 		myEvent->signal();
 	}
 }
 
+//this method restores old routine 
 void IVTEntry::restoreOldRoutine() {
 #ifndef BCC_BLOCK_IGNORE
 	if(oldRoutine!=NULL) {
