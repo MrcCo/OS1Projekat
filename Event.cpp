@@ -7,16 +7,20 @@
 #include "Event.h"
 #include "KEvent.h"
 
+//constructor
+//just creates a kernel event
 Event::Event(IVTNo ivtNo) {
 	lock();
 	myImpl = new KernelEvent(ivtNo);
 	unlock();
 }
 
+//destructor
 Event::~Event() {
 	delete myImpl;
 }
 
+//methods
 void Event::wait() {
 	lock();
 	myImpl->KernelEvent::wait();
