@@ -5,12 +5,6 @@
  *      Author: OS1
  */
 
-/*
- * PCB.cpp
- *
- *  Created on: May 19, 2018
- *      Author: OS1
- */
 #include "Thread.h"
 #include "PCB.h"
 #include "Def.h"
@@ -19,25 +13,22 @@
 #include "W8List.h"
 #include "IdleT.h"
 #include "SlpList.h"
-//this include is confusing bcs i had to remove defaultStackSize and defaultTimeSlice from Thread.h
 #include "Thread.h"
 
 #include <DOS.H>
 #include <STDIO.H>
 
+//initialising static (global) variables
 int PCB::ID = 0;
 PCB* PCB::running = NULL;
-//PCB* PCB::mainPCB = NULL;
-/*********************************/
-/*		Constructor				 */
 
+//constructor 
 PCB::PCB(Thread *Thread, unsigned long stackSize, unsigned int timeSlice) {
 
-	if (stackSize > 65535) {
-		stackSize = 65534;
-	}
+		if (stackSize > 65535) {
+			stackSize = 65534;
+		}
 		//setting up Thread's stack
-
 		stackSize /= sizeof(unsigned);
 		stack = new unsigned[stackSize];
 
@@ -76,25 +67,23 @@ PCB::PCB(Thread *Thread, unsigned long stackSize, unsigned int timeSlice) {
 		PCBList::pcbList->insertFirst(this);
 
 		pcbID = ++ID;
-		//printf("My id is:%d\n",id);
 }
 
+//destructor
 PCB::~PCB(){
 
 	delete[] stack;
 
 }
 
-/*********************************/
-/*		Methods					 */
 
 //Thread controling methods
 
 void PCB::waitToComplete(){
 
 		if (PCB::running == this || state == FINISHED || myThread == IdleThread::idleThread) {
-			// Thread can't wait on itself, doesn't need to wait on a completed thread, and shouldn't wait on the idle thread
-
+			// Thread can't wait on itself, doesn't need to wait on a completed thread,
+			//and shouldn't wait on the idle thread
 			return;
 		}
 		PCB::running->state = BLOCKED;
@@ -156,8 +145,6 @@ void PCB::wrapper(){
 	dispatch();
 #endif
 }
-
-/*********************************/
 
 
 
