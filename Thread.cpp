@@ -5,8 +5,6 @@
  *      Author: OS1
  */
 
-/*********************************/
-/*		Includes 				 */
 
 #include "Thread.h"
 #include "PCB.h"
